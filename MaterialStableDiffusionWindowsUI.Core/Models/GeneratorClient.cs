@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using MaterialStableDiffusionWindowsUI.Core.Poco;
 using SixLabors.ImageSharp;
@@ -16,7 +17,7 @@ public class GeneratorClient
         Client = new();
     }
 
-    public async Task<IEnumerable<Image>> Generate(GenerationParameters parameters)
+    public async Task<IEnumerable<Image>?> Generate(GenerationParameters parameters)
     {
         var response = await Client.PostAsJsonAsync(
             "http://localhost:5000/predictions",
@@ -26,6 +27,8 @@ public class GeneratorClient
                 NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.WriteAsString,
             }
         );
+
+        if (response.StatusCode != HttpStatusCode.OK) { return null; }
 
         var responseBody = await response.Content.ReadFromJsonAsync<ResponseBody>();
         return responseBody.Output.Select(base64 => Convert.FromBase64String(base64[22..])).Select(bytes => Image.Load(bytes));
