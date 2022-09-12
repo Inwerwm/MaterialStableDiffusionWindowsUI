@@ -6,7 +6,50 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea">
-        
-    </Grid>
+    <ScrollViewer x:Name="ContentArea">
+        <StackPanel Spacing="20" Padding="50, 10">
+            <TextBox x:Uid="GenerationParams_Prompt" Text="{x:Bind ViewModel.Prompt, Mode=TwoWay}"/>
+            <Grid RowDefinitions="*, *" ColumnDefinitions="150, *" >
+                <TextBlock x:Uid="GenerationParams_WidthLabel" Grid.Row="0" Grid.Column="0" />
+                <NumberBox Value="{x:Bind ViewModel.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="64" Maximum="2048" Grid.Row="0" Grid.Column="1" />
+                <Slider Value="{x:Bind ViewModel.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="64" Maximum="2048" StepFrequency="64" Grid.Row="1" Grid.ColumnSpan="2" />
+            </Grid>
+            <Grid RowDefinitions="*, *" ColumnDefinitions="150, *" >
+                <TextBlock x:Uid="GenerationParams_HeightLabel" Grid.Row="0" Grid.Column="0" />
+                <NumberBox Value="{x:Bind ViewModel.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="64" Maximum="2048" Grid.Row="0" Grid.Column="1" />
+                <Slider Value="{x:Bind ViewModel.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="64" Maximum="2048" StepFrequency="64" Grid.Row="1" Grid.ColumnSpan="2" />
+            </Grid>
+            <Grid RowDefinitions="*, *" ColumnDefinitions="150, *" >
+                <TextBlock x:Uid="GenerationParams_ScaleLabel" Grid.Row="0" Grid.Column="0" />
+                <NumberBox Value="{x:Bind ViewModel.Scale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="20.0" Grid.Row="0" Grid.Column="1" />
+                <Slider Value="{x:Bind ViewModel.Scale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0.0" Maximum="20.0" StepFrequency="0.1" Grid.Row="1" Grid.ColumnSpan="2" />
+            </Grid>
+            <Grid RowDefinitions="*, *" ColumnDefinitions="150, *" >
+                <TextBlock x:Uid="GenerationParams_NumOutputsLabel" Grid.Row="0" Grid.Column="0" />
+                <NumberBox Value="{x:Bind ViewModel.NumOutputs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="50" Grid.Row="0" Grid.Column="1" />
+                <Slider Value="{x:Bind ViewModel.NumOutputs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="50" StepFrequency="1" Grid.Row="1" Grid.ColumnSpan="2" />
+            </Grid>
+
+            <Button x:Uid="GenerationButton" Command="{x:Bind ViewModel.SubmitCommand}" HorizontalAlignment="Stretch" />
+
+            <Grid ColumnDefinitions="150, *">
+                <ProgressRing IsActive="{x:Bind ViewModel.IsProgress, Mode=OneWay}" VerticalAlignment="Stretch" Grid.Column="0" />
+                <TextBlock Text="{x:Bind ViewModel.ProgressMessage, Mode=OneWay}" VerticalAlignment="Center" Grid.Column="1" />
+            </Grid>
+            <Slider Value="{x:Bind ViewModel.ImageViewSize, Mode=TwoWay}" Minimum="32" Maximum="1024" />
+            <GridView ItemsSource="{x:Bind ViewModel.GeneratedImages, Mode=OneWay}" DataContext="{x:Bind ViewModel}" SelectionMode="None">
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="Width" Value="{x:Bind ViewModel.ImageViewSize, Mode=OneWay}" />
+                        <Setter Property="Height" Value="{x:Bind ViewModel.ImageViewSize, Mode=OneWay}" />
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Image Source="{x:Bind}" Stretch="Uniform" />
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </StackPanel>
+    </ScrollViewer>
 </Page>
