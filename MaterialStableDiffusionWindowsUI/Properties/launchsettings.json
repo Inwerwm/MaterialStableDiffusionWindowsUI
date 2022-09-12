@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "MaterialStableDiffusionWindowsUI (Unpackaged)": {
+        "commandName": "Project"
+      },
+      "MaterialStableDiffusionWindowsUI (Package)": {
+        "commandName": "MsixPackage"
+      }
+    }
+}
